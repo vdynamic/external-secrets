@@ -1,0 +1,32 @@
+# values.yaml
+esoGsm:
+  enabled: true
+
+gsmCredentials:
+  enabled: true
+  secretName: gsm-credentials-secret
+
+eso:
+  version: 0.9.5
+  replicaCount: 1
+  image:
+    repository: quay.io/external-secrets/external-secrets-operator
+    tag: 0.9.5
+    pullPolicy: IfNotPresent
+  env:
+  - name: SECRETS_PROVIDER_GSM
+    value: "true"
+  - name: GOOGLE_APPLICATION_CREDENTIALS
+    value: /etc/gsm/credentials/key.json # Keyless GSAs
+  - name: GOOGLE_APPLICATION_CREDENTIALS_KEY_CONTENTS
+    value: "$(cat /etc/gsm/credentials/key.json)" # Keyless GSAs
+  rbac:
+  create: true
+
+serviceAccount:
+  create: true
+
+gsmCredentialsSecret:
+  gsmCredentialsFile: gsm-credentials.json
+  # GSA name for Workload Identity Federation
+  gsaName: "$(cat /etc/gsm/credentials/gsa-name.txt)" # Contents of GSA name file

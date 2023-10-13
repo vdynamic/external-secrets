@@ -1,0 +1,49 @@
+name: Deploy External Secrets Operator for Tenants
+
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Set up kubectl
+      uses: azure/aks-set-context@v1
+      with:
+        creds: ${{ secrets.KUBE_CONFIG }}
+
+    - name: Set up GSA Name
+      run: |
+        echo "$GSA_NAME" > gsa-name.txt  # Set the GSA name
+      env:
+        GSA_NAME: ${{ secrets.GSA_NAME }}
+
+    - name: Deploy Dev Tenant
+      run: |
+        helm repo add eso-gsm-repo https://path/to/eso-gsm/helm/repo
+        helm upgrade --install dev-eso-gsm eso-gsm-repo/eso-gsm \
+          --values helm-charts/eso-gsm/values/dev-values.yaml  # Use dev-specific values
+      env:
+        GSA_NAME: ${{ secrets.DEV_GSA_NAME }}
+
+    - name: Deploy UAT Tenant
+      run: |
+        helm repo add eso-gsm-repo https://path/to/eso-gsm/helm/repo
+        helm upgrade --install uat-eso-gsm eso-gsm-repo/eso-gsm \
+          --values helm-charts/eso-gsm/values/uat-values.yaml  # Use uat-specific values
+      env:
+        GSA_NAME: ${{ secrets.UAT_GSA_NAME }}
+
+    - name: Deploy PRD Tenant
+      run: |
+        helm repo add eso-gsm-repo https://path/to/eso-gsm/helm/repo
+        helm upgrade --install prd-eso-gsm eso-gsm-repo/eso-gsm \
+          --values helm-charts/eso-gsm/values/prd-values.yaml  # Use prd-specific values
+      env:
+        GSA_NAME: ${{ secrets.PRD_GSA_NAME }}

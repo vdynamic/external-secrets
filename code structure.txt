@@ -1,0 +1,71 @@
+|-- helm-charts/
+|   |-- eso-gsm/
+|   |   |-- charts/
+|   |   |-- templates/
+|   |   |-- values/
+|   |   |   |-- tenant1/
+|   |   |   |   |-- dev-values.yaml
+|   |   |   |   |-- uat-values.yaml
+|   |   |   |   |-- prd-values.yaml
+|   |   |   |-- tenant2/
+|   |   |   |   |-- dev-values.yaml
+|   |   |   |   |-- uat-values.yaml
+|   |   |   |   |-- prd-values.yaml
+|   |   |   |-- tenant3/
+|   |   |   |   |-- dev-values.yaml
+|   |   |   |   |-- uat-values.yaml
+|   |   |   |   |-- prd-values.yaml
+|-- github-actions/
+|   |-- deploy-external-secrets.yml
+|-- gsm-credentials/
+|   |-- gsa-name.txt
+|   |-- gsa-credentials/
+|   |   |-- tenant1-dev-gsa-key.json
+|   |   |-- tenant1-uat-gsa-key.json
+|   |   |-- tenant1-prd-gsa-key.json
+|   |   |-- tenant2-dev-gsa-key.json
+|   |   |-- tenant2-uat-gsa-key.json
+|   |   |-- tenant2-prd-gsa-key.json
+|   |   |-- tenant3-dev-gsa-key.json
+|   |   |-- tenant3-uat-gsa-key.json
+|   |   |-- tenant3-prd-gsa-key.json
+|-- tenant-app/
+|   |-- tenant1/
+|   |   |-- dev/
+|   |   |   |-- app-deployment.yaml
+|   |   |   |-- app-service.yaml
+|   |   |   |-- app-ingress.yaml
+|   |   |-- uat/
+|   |   |   |-- app-deployment.yaml
+|   |   |   |-- app-service.yaml
+|   |   |   |-- app-ingress.yaml
+|   |   |-- prd/
+|   |   |   |-- app-deployment.yaml
+|   |   |   |-- app-service.yaml
+|   |   |   |-- app-ingress.yaml
+|   |-- tenant2/
+|   |   |-- dev/
+|   |   |   |-- app-deployment.yaml
+|   |   |   |-- app-service.yaml
+|   |   |   |-- app-ingress.yaml
+|   |   |-- uat/
+|   |   |   |-- app-deployment.yaml
+|   |   |   |-- app-service.yaml
+|   |   |   |-- app-ingress.yaml
+|   |   |-- prd/
+|   |   |   |-- app-deployment.yaml
+|   |   |   |-- app-service.yaml
+|   |   |   |-- app-ingress.yaml
+|   |-- tenant3/
+|   |   |-- dev/
+|   |   |   |-- app-deployment.yaml
+|   |   |   |-- app-service.yaml
+|   |   |   |-- app-ingress.yaml
+|   |   |-- uat/
+|   |   |   |-- app-deployment.yaml
+|   |   |   |-- app-service.yaml
+|   |   |   |-- app-ingress.yaml
+|   |   |-- prd/
+|   |   |   |-- app-deployment.yaml
+|   |   |   |-- app-service.yaml
+|   |   |   |-- app-ingress.yaml

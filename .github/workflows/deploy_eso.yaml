@@ -1,0 +1,41 @@
+name: Deploy External Secrets Operator
+
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Set up kubectl
+      uses: azure/aks-set-context@v1
+      with:
+        creds: ${{ secrets.KUBE_CONFIG }}
+
+    - name: Set up GSA Name
+      run: |
+        echo "$GSA_NAME" > gsa-name.txt  # Set the GSA name
+      env:
+        GSA_NAME: ${{ secrets.GSA_NAME }}
+
+    - name: Create Keyless GSA Key File
+      run: |
+        gcloud iam service-accounts keys create /etc/gsm/credentials/key.json \
+          --iam-account $GSA_NAME@$GOOGLE_PROJECT.iam.gserviceaccount.com
+      env:
+        GOOGLE_PROJECT: my-gcp-project # Replace with your GCP project ID
+        GSA_NAME: ${{ secrets.GSA_NAME }}
+
+    - name: Helm Install ESO and GSM
+      run: |
+        helm repo add eso-gsm-repo https://path/to/eso-gsm/helm/repo
+        helm upgrade --install eso-gsm eso-gsm-repo/eso-gsm \
+          --set esoGsm.enabled=true \
+          --set gsmCredentials.enabled=true \
+          --set gsmCredentials.secretName=gsm-credentials-secret

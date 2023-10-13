@@ -1,0 +1,33 @@
+name: Deploy External Secrets Operator and Tenant Applications on OpenShift
+
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Log in to OpenShift
+      env:
+        KUBECONFIG: ${{ secrets.OPENSHIFT_KUBECONFIG }}
+      run: oc login -u ${{ secrets.OPENSHIFT_USERNAME }} -p ${{ secrets.OPENSHIFT_PASSWORD }}
+
+    - name: Deploy Tenants
+      run: |
+        tenants=("tenant1" "tenant2" "tenant3")
+        environments=("dev" "uat" "prd")
+        for tenant in "${tenants[@]}"; do
+          for env in "${environments[@]}"; do
+            echo "Deploying ${tenant} - ${env} environment..."
+            helm upgrade --install ${tenant}-${env}-eso-gsm ./helm-charts/eso-gsm --values ./helm-charts/eso-gsm/values/${tenant}/${env}-values.yaml
+            oc apply -f ./tenant-app/${tenant}/${env}/app-deployment.yaml
+            oc apply -f ./tenant-app/${tenant}/${env}/app-service.yaml
+            oc apply -f ./tenant-app/${tenant}/${env}/app-ingress.yaml
+          done
+        done
